@@ -81,12 +81,14 @@ This project is pre-configured for automatic deployment to Google Cloud Run usin
 8. Enable the [Cloud Build Triggers API](https://console.cloud.google.com/cloud-build/triggers).
 
 9. Create a Cloud Build trigger:
-   - Click "Create Trigger".
+   - Click "Connect Repository",
+   - Link your GitHub account to GCP and grant access to the repository by selecting "*Edit repositories on GitHub*".
+   - Select *Create a trigger* after selecting the repository.
    - Set a name (e.g., "project-name-deploy").
-   - In the *Source* section, choose your source repository. (You may need to link your GitHub account to GCP and grant access to the repository by selecting "*Edit repositories on GitHub*").
-   - Specify the branch to trigger builds from.
-   - Under "Configuration", choose "Cloud Build configuration file (yaml or json)".
-   - Set the location to *Repository* and the path to `cloudbuild.yaml`.
+   - Inside the *Source* section, specify the branch to trigger builds from (the default is `main`).
+   - Inside the *Configuration* section, choose "Cloud Build configuration file (YAML or JSON)".
+   - Set the location to *Repository* and the path to `cloudbuild.yaml` (it is pribably already set by default).
+   - Select a service account.
    - Click "Create".
 
 10. Create a Cloud Run service linked to the Cloud Build trigger:
