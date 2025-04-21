@@ -17,6 +17,7 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
    ```bash
    npx create-robo <projectName> && mv <projectName>/* . && rmdir <projectName>
    ```
+   > A couple of warnings regarding moving files after running the command are expected. They can be ignored.
 
 4. Select *Web Application* as the project type.
 
