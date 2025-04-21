@@ -9,24 +9,24 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
 ## Setup
 
-> It is recommended to fork this repository to your GitHub account and use it as a base for your project.
+1. Fork this repository or use it as a template for your own project.
 
-1. Clone this repository and navigate to its directory.
+2. Clone your repository and navigate to its directory.
 
-2. Create a new project using the RoboJS CLI. Replace `<projectName>` with your desired project name:
+3. Create a new project using the RoboJS CLI. Replace `<projectName>` with your desired project name:
    ```bash
    npx create-robo <projectName> && mv <projectName>/* . && rmdir <projectName>
    ```
 
-3. Select *Web Application* as the project type.
+4. Select *Web Application* as the project type.
 
-4. Enable the following features for the project:
+5. Enable the following features for the project:
    - *TypeScript*
    - *React*
    - *Prettier*
    - *ESLint*
 
-5. Enable *Sync* if your project requires state synchronization between clients.
+6. Enable *Sync* if your project requires state synchronization between clients.
 
    > See the [Synchronization of State between Clients](#synchronization-of-state-between-clients) section for more details.
 
