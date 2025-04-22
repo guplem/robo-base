@@ -78,6 +78,8 @@ This project is pre-configured for automatic deployment to Google Cloud Run usin
    gcloud artifacts repositories create cloud-run-source-deploy --repository-format=docker --location=europe-southwest1 --description="Docker repository for Cloud Run deployments"
    ```
 
+   > The location can be changed to your preferred region. The command above uses `europe-southwest1` as an example.
+
 8. Enable the [Cloud Build Triggers API](https://console.cloud.google.com/cloud-build/triggers).
 
 9. Create a Cloud Build trigger:
@@ -91,18 +93,24 @@ This project is pre-configured for automatic deployment to Google Cloud Run usin
    - Select a service account.
    - Click "Create".
 
-10. Create a Cloud Run service linked to the Cloud Build trigger:
-    - Go to [Cloud Run](https://console.cloud.google.com/run).
-    - Create the service.
-    - Set the trigger to the one you just created.
+10. Trigger the first build:
+    - Go to the [Cloud Build Triggers](https://console.cloud.google.com/cloud-build/triggers) page.
+    - Click on the "Run" button next to the trigger you just created.
 
-11. Enable public access to the Cloud Run service:
+11. Create a Cloud Run service linked to the Container image built by Cloud Build (stored in the Artifact Registry):
+    - Go to [Cloud Run](https://console.cloud.google.com/run).
+    - Click "Deploy container" > "Service".
+    - Click "Select" in the *Container image URL* section.
+    - Select the image from the Artifact Registry repository you created earlier.
+    - ...
+
+12. Enable public access to the Cloud Run service:
     - In [Cloud Run](https://console.cloud.google.com/run), select the service.
     - Click on "Security".
     - Under "Authentication", select "Allow unauthenticated invocations".
     - Click "Save".
 
-12. Update the `_SERVICE_NAME` variable in the `cloudbuild.yaml` file (under the *substitutions* section) to match the name of your Cloud Run service.
+13. Update the `_SERVICE_NAME` variable in the `cloudbuild.yaml` file (under the *substitutions* section) to match the name of your Cloud Run service.
 
 ### Manual Deployment
 To trigger a manual deployment, run:

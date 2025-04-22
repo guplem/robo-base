@@ -1,37 +1,58 @@
-# Use the official Node.js 22 image as the base image
-FROM node:22-alpine as builder
+# This Dockerfile uses multi-stage builds to optimize the final image size
+# by separating the build environment from the runtime environment.
 
-# Set the working directory
-WORKDIR /app
+# ~~~~~ Base ~~~~~
+# Base stage: Sets up the foundation used by both build and release stages
+FROM node:22-alpine AS base
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Install system dependencies
+# - curl: For network requests and downloading tools
+# - g++, make, python3, py3-pip: Required for building native modules
+# - tini: A tiny init process to properly handle signals and zombie processes
+RUN apk add --no-cache curl g++ make python3 py3-pip tini
 
-# Install dependencies
+# Set the working directory for all operations
+WORKDIR /usr/src/app
+
+# Copy package files for dependency installation
+COPY --chown=node:node package*.json ./
+
+# ~~~~~ Build ~~~~~
+# Build stage: Compiles the application and prepares dependencies
+FROM base AS build
+
+# Install all dependencies (including devDependencies)
 RUN npm install
 
-# Copy the rest of the application
-COPY . .
+# Copy application code to the container
+COPY --chown=node:node . .
 
-# Build the application
+# Build the application (transpile TypeScript, bundle assets, etc.)
 RUN npm run build
 
-# Production stage
-FROM node:22-alpine
+# Remove development dependencies to reduce size
+RUN npm prune --omit=dev --silent
 
-WORKDIR /app
+# ~~~~~ Release ~~~~~
+# Release stage: Creates the final production image
+FROM base AS release
 
-# Install serve to run the application
-RUN npm install -g serve
+# Install production dependencies only
+RUN npm install --omit=dev --silent
 
-# Copy the built application from the builder stage
-COPY --from=builder /app/dist /app/dist
+# Copy built application from the build stage
+COPY --from=build /usr/src/app/dist /usr/src/app/dist
+COPY --from=build /usr/src/app/.robo /usr/src/app/.robo
 
-# Use the PORT environment variable from Cloud Run
+# Switch to non-root user for security
+USER node
+
+# Set the port to 8080 as required
 ENV PORT=8080
 
-# Expose the port the app runs on
+# Document that the application listens on port 8080
 EXPOSE 8080
 
-# Command to run the application - use the PORT env variable and add CORS headers
-CMD ["sh", "-c", "serve -s dist -l $PORT --cors"]
+# Start the application using tini as the init process
+# tini ensures proper signal handling and zombie process reaping
+CMD [ "tini", "--", "npm", "start" ]

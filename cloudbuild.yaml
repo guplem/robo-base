@@ -1,23 +1,9 @@
 # Disable automatic buildpacks - use custom build steps only
 steps:
-  # Install dependencies
-  - name: "node:22"
-    entrypoint: npm
-    args: ["install"]
-    id: "install"
-
-  # Build the application
-  - name: "node:22"
-    entrypoint: npm
-    args: ["run", "build"]
-    id: "build"
-    waitFor: ["install"]
-
-  # Build and push the container image
+  # Build the container image
   - name: "gcr.io/cloud-builders/docker"
     args: ["build", "-t", "europe-southwest1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/${_SERVICE_NAME}:${SHORT_SHA}", "."]
     id: "docker-build"
-    waitFor: ["build"]
 
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
