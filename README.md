@@ -51,38 +51,49 @@ After running the command:
 
 This project is pre-configured for automatic deployment to Google Cloud Run using a custom build process defined in `cloudbuild.yaml`.
 
-1. Create a new project in the [Google Cloud Console](https://console.cloud.google.com).
+1. In the file located in `config\plugins\robojs\server.ts`, add the `hostname` parameter to the sever configuration with the value of `0.0.0.0`:
+   ```typescript
+   export default {
+      cors: true,
+      hostname: '0.0.0.0'
+      // other options...
+   }
+   ``` 
 
-2. Select the project in the top bar of the GCP console.
+2. Update the `_SERVICE_NAME` variable in the `cloudbuild.yaml` file (under the *substitutions* section) so it has a recognizable name. This name will be used to create the Cloud Run service (e.g., "project-name-service").
 
-3. Enable the [Artifact Registry API](https://console.cloud.google.com/artifacts).
+3. Create a new project in the [Google Cloud Console](https://console.cloud.google.com).
 
-4. Install the [GCP CLI](https://cloud.google.com/sdk/docs/install) and verify the installation:
+4. Select the project in the top bar of the GCP console.
+
+5. Enable the [Artifact Registry API](https://console.cloud.google.com/artifacts).
+
+6. Install the [GCP CLI](https://cloud.google.com/sdk/docs/install) and verify the installation:
    ```bash
    gcloud --version
    ```
 
-5. Log in to your GCP account:
+7. Log in to your GCP account:
    ```bash
    gcloud auth login
    ```
 
-6. Set the project ID in your terminal:
+8. Set the project ID in your terminal:
    ```bash
    gcloud config set project <project-id>
    ```
    > The project ID can be found in the [GCP console](https://console.cloud.google.com/welcome).
 
-7. Create a repository in Artifact Registry:
+9. Create a repository in Artifact Registry:
    ```bash
    gcloud artifacts repositories create cloud-run-source-deploy --repository-format=docker --location=europe-southwest1 --description="Docker repository for Cloud Run deployments"
    ```
 
    > The location can be changed to your preferred region. The command above uses `europe-southwest1` as an example.
 
-8. Enable the [Cloud Build Triggers API](https://console.cloud.google.com/cloud-build/triggers).
+10. Enable the [Cloud Build Triggers API](https://console.cloud.google.com/cloud-build/triggers).
 
-9. Create a Cloud Build trigger:
+11. Create a Cloud Build trigger:
    - Click "Connect Repository",
    - Link your GitHub account to GCP and grant access to the repository by selecting "*Edit repositories on GitHub*".
    - Select *Create a trigger* after selecting the repository.
@@ -93,24 +104,24 @@ This project is pre-configured for automatic deployment to Google Cloud Run usin
    - Select a service account.
    - Click "Create".
 
-10. Trigger the first build:
+12. Set up the service account with the necessary permissions:
+   - Go to the [IAM & Admin](https://console.cloud.google.com/iam-admin/iam) page.
+   - Find the service account you selected in the previous step (it should have a name like `something@something.gserviceaccount.com`).
+   - Click on the pencil icon to edit the service account.
+   - *Add* the following role: `Cloud Run Admin`.
+   - Click "Save".
+
+13. Trigger the first build:
     - Go to the [Cloud Build Triggers](https://console.cloud.google.com/cloud-build/triggers) page.
     - Click on the "Run" button next to the trigger you just created.
 
-11. Create a Cloud Run service linked to the Container image built by Cloud Build (stored in the Artifact Registry):
-    - Go to [Cloud Run](https://console.cloud.google.com/run).
-    - Click "Deploy container" > "Service".
-    - Click "Select" in the *Container image URL* section.
-    - Select the image from the Artifact Registry repository you created earlier.
-    - ...
+    > Alternatively, you can push a commit to the branch you specified in the trigger settings. This will automatically trigger a build.
 
-12. Enable public access to the Cloud Run service:
-    - In [Cloud Run](https://console.cloud.google.com/run), select the service.
-    - Click on "Security".
-    - Under "Authentication", select "Allow unauthenticated invocations".
-    - Click "Save".
-
-13. Update the `_SERVICE_NAME` variable in the `cloudbuild.yaml` file (under the *substitutions* section) to match the name of your Cloud Run service.
+The build process will automatically:
+- Create a Cloud Run service with your specified name if it doesn't exist
+- Configure it with public access (allow unauthenticated invocations)
+- Enable cold boot capabilities (CPU throttling when idle)
+- Set maximum CPU scaling to 3 CPUs
 
 ### Manual Deployment
 To trigger a manual deployment, run:

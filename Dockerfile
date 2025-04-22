@@ -41,17 +41,14 @@ FROM base AS release
 RUN npm install --omit=dev --silent
 
 # Copy built application from the build stage
-COPY --from=build /usr/src/app/dist /usr/src/app/dist
-COPY --from=build /usr/src/app/.robo /usr/src/app/.robo
+# The output directory for `robo build` is `.robo`: https://robojs.dev/robojs/internals#build-process
+COPY --from=build /usr/src/app/ /usr/src/app/
 
 # Switch to non-root user for security
 USER node
 
-# Set the port to 8080 as required
-ENV PORT=8080
-
-# Document that the application listens on port 8080
-EXPOSE 8080
+# Ensure the application listens on the specified port
+EXPOSE 3000
 
 # Start the application using tini as the init process
 # tini ensures proper signal handling and zombie process reaping
