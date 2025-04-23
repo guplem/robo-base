@@ -44,6 +44,11 @@ RUN npm install --omit=dev --silent
 # The output directory for `robo build` is `.robo`: https://robojs.dev/robojs/internals#build-process
 COPY --from=build /usr/src/app/ /usr/src/app/
 
+# Create a dedicated data directory for Flashcore
+RUN mkdir -p /usr/src/app/.robo/data && \
+    chown -R node:node /usr/src/app/.robo/data && \
+    chmod -R 755 /usr/src/app/.robo/data
+
 # Switch to non-root user for security
 USER node
 
