@@ -73,6 +73,9 @@ web_modules/
 .env.test.local
 .env.production.local
 
+# TypeScript
+*.tsbuildinfo
+
 # REPL / debug history
 .node_repl_history
 .tern-port
