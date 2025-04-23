@@ -15,7 +15,7 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
 3. Create a new project using the RoboJS CLI. Replace `<projectName>` with your desired project name:
    ```bash
-   npx create-robo <projectName> && mv <projectName>/* . && rmdir <projectName>
+   npx create-robo <projectName> && mv <projectName>/* . ; rmdir -r <projectName>
    ```
 
 4. Select *Web Application* as the project type.
