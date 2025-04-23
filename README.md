@@ -33,7 +33,7 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
 > At the end, you may see a few warnings about moving files after running the command. These can be safely ignored.
 
-# Environment Variables
+### Environment Variables
 
 You can create a `.env` file in the root directory of your project to set environment variables. This file is ignored by Git, so it won't be pushed to your repository.
 
