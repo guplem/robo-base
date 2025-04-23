@@ -26,6 +26,7 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
    - *React*
    - *Prettier*
    - *ESLint*
+   > See linting documentation [here](https://robojs.dev/robojs/linting).
 
 6. Enable *Sync* if your project requires state synchronization between clients.
 
@@ -133,8 +134,10 @@ gcloud builds submit --config=cloudbuild.yaml
 
 This project uses [RoboJS's plugin system](https://robojs.dev/plugins/directory), where many features are implemented as plugins. Recommended plugins include:
 
-### Synchronization of State between Clients
+### State Management
+Use [Robo's state management](https://robojs.dev/robojs/state) to temprorarily store data in memory. This is useful for storing data that doesn't need to be persisted across server restarts or for storing data that is only needed during the lifetime of the application.
 
+#### Synchronization of State between Clients
 Use [@robojs/sync](https://robojs.dev/plugins/sync) for state synchronization. This is useful for shared experiences like games or collaborative applications.
 
 The `useSyncState` hook creates a state synchronized between clients. The state can be shared across all clients or within a specific room (group of clients):
@@ -147,3 +150,49 @@ const [sharedState, setSharedState] = useSyncState<boolean>(false, ['uniqueId'])
 // For state shared only within a room (group of clients)
 const [channelState, setChannelState] = useSyncState<string>("", ['uniqueId', roomId]);
 ```
+
+### Shared Data
+Robo comes bundled with [Flashcore Database](https://robojs.dev/robojs/flashcore), a key-value pair database. It is a simple and fast database that can be used for storing data in your application accessible from all clients. It is not a full-fledged database, but it is useful for storing small amounts of data.
+
+```typescript
+import { Flashcore } from 'robo.js'
+import type { CommandInteraction } from 'discord.js'
+
+export default async (interaction: CommandInteraction) => {
+	const userId = interaction.user.id
+
+	const score = await Flashcore.get(userId)
+	return score ? `High score alert: ${score}! 🏆` : 'No high score found. Game time! 🎮'
+}
+```
+
+> **Be careful**, Flashcore will not persist the data outside the container. So *if the container is restarted or killed because it has cold-boot enabled, all data will be lost*.
+
+It also allows [watching for changes](https://robojs.dev/robojs/flashcore#watching-for-changes) in the database with the `Flashcore.on(...)` method and `Flashcore.off(...)` method to stop watching for changes.
+
+### API
+Robo comes bundled with [@robojs/server](https://robojs.dev/plugins/server), a simple server for creating and managing API endpoints.
+
+```typescript
+export default (request, reply) => {
+	if (request.method !== 'GET') {
+		throw new Error('Method not allowed')
+	}
+
+	const userId = request.params.id
+
+	// ... perform some action with userId
+
+	return { message: `User ID is ${userId}` }
+}
+```
+
+### Other Features
+Checkout the [RoboJS documentation](https://robojs.dev/) for more information on available [plugins](https://robojs.dev/plugins) and [features](https://robojs.dev/robojs/overview).
+
+Some interesting features might be:
+- [Logger](https://robojs.dev/robojs/logger): A simple but powerful logger for your application.
+- [Running Mode](https://robojs.dev/robojs/mode): A way to select which `.env` file to use based on the running mode of your application. This is useful for separating development and production environments, testing the balance of a game, or any other use case where you need to run the same code with different configurations.
+- [Scheduled Tasks](https://robojs.dev/plugins/cron): A plugin for scheduling tasks to run at specific intervals or times.
+
+And many more! **It is worth checking out the [plugins](https://robojs.dev/plugins) and [features](https://robojs.dev/robojs/overview) available** in RoboJS.
