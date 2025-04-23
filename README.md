@@ -53,7 +53,7 @@ Start the development server with hot reloading:
 > Make sure you have run `npm install` before starting the development server.
 
 ```bash
-npx robo dev
+npx run dev
 ```
 
 After running the command:
