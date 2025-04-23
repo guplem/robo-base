@@ -33,6 +33,19 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
 > At the end, you may see a few warnings about moving files after running the command. These can be safely ignored.
 
+# Environment Variables
+
+You can create a `.env` file in the root directory of your project to set environment variables. This file is ignored by Git, so it won't be pushed to your repository.
+
+The default `.env` file created by the RoboJS CLI contains the following variables:
+```dotenv
+# Enable source maps for easier debugging
+NODE_OPTIONS="--enable-source-maps"
+
+# Change this port number if needed
+PORT="3000"
+```
+
 ## Development Mode and Local Hosting
 
 Start the development server with hot reloading:
@@ -46,6 +59,8 @@ npx robo dev
 After running the command:
 - The server will start at `http://localhost:3000/`.
 - An external tunnel will be created (the URL will appear in the console). This allows you to test on other devices or share the server with others.
+
+> If you want to run it using docker, you can use `docker build -t robo-app .; docker run -p 3000:3000 robo-app`.
 
 ## Deployment
 
