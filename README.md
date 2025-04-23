@@ -11,13 +11,12 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
 1. Fork this repository or use it as a template for your own project.
 
-2. Clone your repository and navigate to its directory.
+2. Clone your repository to your computer and navigate to its directory.
 
 3. Create a new project using the RoboJS CLI. Replace `<projectName>` with your desired project name:
    ```bash
    npx create-robo <projectName> && mv <projectName>/* . && rmdir <projectName>
    ```
-   > You may see a few warnings about moving files after running the command. These can be safely ignored.
 
 4. Select *Web Application* as the project type.
 
@@ -32,6 +31,8 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
    > For more details, see the [Synchronization of State between Clients](#synchronization-of-state-between-clients) section.
 
+> At the end, you may see a few warnings about moving files after running the command. These can be safely ignored.
+
 ## Development Mode and Local Hosting
 
 Start the development server with hot reloading:
@@ -44,7 +45,7 @@ npx robo dev
 
 After running the command:
 - The server will start at `http://localhost:3000/`.
-- An external tunnel will be created (the URL will appear in the console). This allows you to test on mobile devices or share the server with others.
+- An external tunnel will be created (the URL will appear in the console). This allows you to test on other devices or share the server with others.
 
 ## Deployment
 
