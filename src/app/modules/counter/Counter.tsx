@@ -1,5 +1,4 @@
 import { JSX, useEffect, useState } from 'react';
-import './App.css';
 
 export default function Counter(): JSX.Element {
 	const { count, increment }: { count: number; increment: () => void } = useCounter();
