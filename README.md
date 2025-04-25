@@ -35,6 +35,36 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
 > At the end, you may see a few warnings about moving files after running the command. These can be safely ignored.
 
+### Configuring Path Aliases
+
+To avoid having to use relative paths in your imports, you can set up path aliases for your project. This allows you to use non-relative imports like `import { MyComponent } from '@/components/MyComponent'` instead of `import { MyComponent } from '../../components/MyComponent'`.
+
+1. In `tsconfig.json`, update `compilerOptions`:
+     ```jsonc
+     {
+       "compilerOptions": {
+         // ...existing code...
+         "baseUrl": ".",
+         "paths": {
+           "@/*": ["src/*"]
+         }
+       }
+     }
+     ```
+
+2. In `config/vite.mjs`, under `resolve.alias`:
+     ```javascript
+     import path from 'path'
+     // ...existing code...
+     resolve: {
+       alias: {
+         '@': path.resolve(__dirname, '../src')
+       }
+     }
+     ```
+
+> You can see an example of this in [this commit](https://github.com/guplem/robo-base/commit/99f6a70849d39d664121a4b1b75453178a64015c).
+
 ### Environment Variables
 
 You can create a `.env` file in the root directory of your project to set environment variables. This file is ignored by Git, so it won't be pushed to your repository.
