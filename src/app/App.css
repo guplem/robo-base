@@ -67,7 +67,7 @@ button:focus-visible {
 }
 
 .powered-by a {
-	color: #ffffff;
+	color: gray;
 	font-weight: 700;
 }
 

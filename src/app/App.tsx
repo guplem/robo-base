@@ -1,38 +1,11 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import React, { createContext, JSX, useState } from 'react'
+import Counter from './modules/counter/Counter'
+import RoomPicker from './modules/room/RoomPicker'
 
-export default function App() {
-	const { count, increment } = useCounter()
+const RoomContext: React.Context<string | null> = createContext<string | null>(null)
 
-	return (
-		<div>
-			<h1>Hello, World</h1>
-			<section>
-				<button onClick={increment}>Counter: {count}</button>
-			</section>
-			<small className="powered-by">
-				Powered by <a href="https://roboplay.dev/docs">Robo.js</a>
-			</small>
-		</div>
-	)
-}
+export default function App(): JSX.Element {
+	const [room, setRoom] = useState<string | null>(null)
 
-// Simple custom hook to use included APIs for demo purposes
-function useCounter() {
-	const [count, setCount] = useState(0)
-
-	useEffect(() => {
-		const run = async () => {
-			const data = await fetch('/api/get-count').then((res) => res.json())
-			setCount(data.count)
-		}
-		run()
-	}, [])
-
-	const increment = async () => {
-		const data = await fetch('/api/set-count').then((res) => res.json())
-		setCount(data.count)
-	}
-
-	return { count, increment }
+	return <RoomContext.Provider value={room}>{!room ? <RoomPicker /> : <Counter />}</RoomContext.Provider>
 }
