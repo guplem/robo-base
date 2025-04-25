@@ -27,6 +27,8 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
    - *ESLint*
    > See linting documentation [here](https://robojs.dev/robojs/linting).
 
+   > The *opinionated* configuration of *Prettier* and *ESLint* is bundled with this project. You can remove it or customize it later if needed by altering the `.prettierrc`, `.prettierignore` and `.eslintrc.js` files. 
+
 6. Enable *Sync* if your project requires state synchronization between clients.
 
    > For more details, see the [Synchronization of State between Clients](#synchronization-of-state-between-clients) section.
