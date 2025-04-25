@@ -1,6 +1,6 @@
 import React, { createContext, JSX, useState } from 'react'
-import Counter from './modules/counter/Counter'
-import RoomPicker from './modules/room/RoomPicker'
+import Counter from '@/app/modules/counter/Counter'
+import RoomPicker from '@/app/modules/room/RoomPicker'
 
 const RoomContext: React.Context<string | null> = createContext<string | null>(null)
 
