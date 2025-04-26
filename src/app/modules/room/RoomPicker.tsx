@@ -18,30 +18,25 @@ export default function RoomPicker(): JSX.Element {
 	return (
 		<div
 			// Div (container) that centers its child at its center
+			className='centeredChildren'
 			style={{
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
-				height: '100vh',
+				minHeight: '100vh',
+				minWidth: '100vw',
 			}}
 		>
 			<div
 				// The centered div (element)
 				style={{
-					overflowY: 'auto', // Allow scrolling if the content overflows
+					backgroundColor: 'var(--container)',
+					borderRadius: '10px',
+					padding: '20px',
 				}}
 			>
 				<h1>Room Picker</h1>
 				<form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-					<div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+					<div className='wrapWithStretchedChildren' style={{ gap: '5px' }}>
 						<label htmlFor='roomName'>Room Name</label>
-						<input
-							style={{ flex: '1 1 auto' }} // Allow the input to grow and shrink
-							id='roomName'
-							type='text'
-							value={roomName}
-							onChange={handleInputChange}
-						/>
+						<input id='roomName' type='text' value={roomName} onChange={handleInputChange} autoFocus />
 					</div>
 					<button type='submit' disabled={roomName === ''}>
 						Submit
