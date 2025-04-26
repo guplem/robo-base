@@ -33,9 +33,15 @@ export default function RoomPicker(): JSX.Element {
 			>
 				<h1>Room Picker</h1>
 				<form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-					<div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '5px' }}>
+					<div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
 						<label htmlFor='roomName'>Room Name</label>
-						<input id='roomName' type='text' value={roomName} onChange={handleInputChange} />
+						<input
+							style={{ flex: '1 1 auto' }} // Allow the input to grow and shrink
+							id='roomName'
+							type='text'
+							value={roomName}
+							onChange={handleInputChange}
+						/>
 					</div>
 					<button type='submit' disabled={roomName === ''}>
 						Submit
