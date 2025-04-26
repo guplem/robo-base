@@ -17,63 +17,30 @@ export default function RoomPicker(): JSX.Element {
 
 	return (
 		<div
+			// Div (container) that centers its child at its center
 			style={{
 				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',
-				backgroundColor: 'red',
-				minHeight: '100vh',
+				height: '100vh',
 			}}
 		>
 			<div
+				// The centered div (element)
 				style={{
-					backgroundColor: 'green',
-					maxHeight: '100vh',
+					overflowY: 'auto', // Allow scrolling if the content overflows
 				}}
 			>
-				{/* The actual contents: */}
-				<div>
-					<h1>Room Picker</h1>
-					<form onSubmit={handleSubmit}>
+				<h1>Room Picker</h1>
+				<form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+					<div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '5px' }}>
 						<label htmlFor='roomName'>Room Name</label>
 						<input id='roomName' type='text' value={roomName} onChange={handleInputChange} />
-						<button type='submit' disabled={roomName === ''}>
-							Submit
-						</button>
-					</form>
-					{/* In the future, this content under the orm will be generated dynamically, and sometimes it won't fit */}
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					<p>Enter a room name to join or create a new room.</p>
-					{/* <p>
-						{' '}
-						a room name to join or create a new room. Enter a room name to join or create a new room. a room name to
-						join or create a new room. a room name to join or create a new room. a room name to join or create a new
-						room. a room name to join or create a new room.
-					</p> */}
-				</div>
+					</div>
+					<button type='submit' disabled={roomName === ''}>
+						Submit
+					</button>
+				</form>
 			</div>
 		</div>
 	);
