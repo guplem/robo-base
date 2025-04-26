@@ -18,21 +18,20 @@ export default function RoomPicker(): JSX.Element {
 	return (
 		<div
 			style={{
-				padding: '20px',
-				height: '100vh',
-				boxSizing: 'border-box', // include padding in the height calculations
-				backgroundColor: '#f0f0f0',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				backgroundColor: 'red',
+				minHeight: '100vh',
 			}}
 		>
 			<div
 				style={{
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-					height: '100%',
-					backgroundColor: '#fff',
+					backgroundColor: 'green',
+					maxHeight: '100vh',
 				}}
 			>
+				{/* The actual contents: */}
 				<div>
 					<h1>Room Picker</h1>
 					<form onSubmit={handleSubmit}>
@@ -42,6 +41,38 @@ export default function RoomPicker(): JSX.Element {
 							Submit
 						</button>
 					</form>
+					{/* In the future, this content under the orm will be generated dynamically, and sometimes it won't fit */}
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					<p>Enter a room name to join or create a new room.</p>
+					{/* <p>
+						{' '}
+						a room name to join or create a new room. Enter a room name to join or create a new room. a room name to
+						join or create a new room. a room name to join or create a new room. a room name to join or create a new
+						room. a room name to join or create a new room.
+					</p> */}
 				</div>
 			</div>
 		</div>
