@@ -9,7 +9,7 @@ export default function App(): JSX.Element {
 
 	return (
 		<RoomContext.Provider value={room}>
-			<div className='noisyBackground' style={{ backgroundColor: 'var(--background)' }}>
+			<div className='noisyBackground' style={{ backgroundColor: 'var(--background-for-noise)' }}>
 				{!room ? <RoomPicker /> : <Counter />}
 			</div>
 		</RoomContext.Provider>
