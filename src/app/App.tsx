@@ -1,15 +1,22 @@
+import { RoomContext } from '@/app/contexts/room';
 import Counter from '@/app/modules/counter/Counter';
 import RoomPicker from '@/app/modules/room/RoomPicker';
-import React, { createContext, JSX, useState } from 'react';
+import { JSX, useState } from 'react';
 
-const RoomContext: React.Context<string | null> = createContext<string | null>(null);
-
+// The
 export default function App(): JSX.Element {
 	const [room, setRoom] = useState<string | null>(null);
 
 	return (
-		<RoomContext.Provider value={room}>
-			<div className='noisyBackground' style={{ backgroundColor: 'var(--background-for-noise)' }}>
+		<RoomContext.Provider value={[room, setRoom]}>
+			<div
+				className='noisyBackground'
+				style={{
+					backgroundColor: 'var(--background-for-noise)',
+					overflow: 'auto',
+					minHeight: '100vh',
+				}}
+			>
 				{!room ? <RoomPicker /> : <Counter />}
 			</div>
 		</RoomContext.Provider>
