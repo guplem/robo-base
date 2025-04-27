@@ -183,7 +183,18 @@ gcloud builds submit --config=cloudbuild.yaml
 This project uses [RoboJS's plugin system](https://robojs.dev/plugins/directory), where many features are implemented as plugins. Recommended plugins include:
 
 ### State Management
-Use [Robo's state management](https://robojs.dev/robojs/state) to temporarily store data in memory. This is useful for storing data that doesn't need to persist across server restarts or for data only needed during the application's lifetime.
+Use [Robo's state management](https://robojs.dev/robojs/state) to temporarily store data in memory. This is useful for storing data that doesn't need to persist across server restarts or for data only needed during the application's lifetime but persist across page reloads.
+
+```typescript
+import { setState, getState } from 'robo.js'
+import type { CommandResult } from 'robo.js'
+
+export default (): CommandResult => {
+	let currentPoints = getState('currentPoints') ?? 0
+	setState('currentPoints', currentPoints + 10)
+	return `You've gained 10 points! Your current total is ${currentPoints + 10} points.`
+}
+```
 
 #### Synchronization of State between Clients
 Use [@robojs/sync](https://robojs.dev/plugins/sync) for state synchronization. This is ideal for shared experiences like games or collaborative applications.
