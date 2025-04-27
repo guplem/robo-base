@@ -12,7 +12,8 @@ export default function RoomPicker(): JSX.Element {
 	// on submit, prevent reload and log the entered room name
 	const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
 		event.preventDefault();
-		console.log(roomName);
+		console.log("Room selected", roomName);
+		// Set the room in the context
 	};
 
 	return (
