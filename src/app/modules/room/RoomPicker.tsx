@@ -1,5 +1,6 @@
 import { RoomContext } from '@/app/contexts/room';
 import React, { ChangeEvent, FormEvent, JSX, useContext, useState } from 'react';
+import { logger } from 'robo.js';
 
 export default function RoomPicker(): JSX.Element {
 	// pull the room context from the app
@@ -15,8 +16,7 @@ export default function RoomPicker(): JSX.Element {
 	// on submit, prevent reload, log and set the entered room name
 	const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
 		event.preventDefault();
-		// logger.info('Room selected... ');
-		console.log('Room selected: ', roomFieldValue);
+		logger.info(`Room selected: ${roomFieldValue}`);
 		setRoom(roomFieldValue);
 	};
 
