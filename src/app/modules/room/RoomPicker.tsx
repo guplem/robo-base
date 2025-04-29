@@ -1,11 +1,16 @@
-import { RoomContext } from '@/app/contexts/room';
-import React, { ChangeEvent, FormEvent, JSX, useContext, useState } from 'react';
-import { logger } from 'robo.js';
+import { useRoomStore } from '@/app/modules/room/store';
+import React, { ChangeEvent, FormEvent, JSX, useState } from 'react';
 
 export default function RoomPicker(): JSX.Element {
-	// pull the room context from the app
-	const [room, setRoom]: [string | null, React.Dispatch<React.SetStateAction<string | null>>] =
-		useContext(RoomContext);
+	const {
+		room,
+		join,
+		leave,
+	}: {
+		room: string | null;
+		join: (_roomName: string) => void;
+		leave: () => void;
+	} = useRoomStore();
 
 	// state for the text field
 	const [roomFieldValue, setRoomFieldValue]: [
@@ -16,8 +21,7 @@ export default function RoomPicker(): JSX.Element {
 	// on submit, prevent reload, log and set the entered room name
 	const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
 		event.preventDefault();
-		logger.info(`Room selected: ${roomFieldValue}`);
-		setRoom(roomFieldValue);
+		join(roomFieldValue);
 	};
 
 	// This should not be possible, but just in case
@@ -35,6 +39,14 @@ export default function RoomPicker(): JSX.Element {
 				{/* The centered elements */}
 				<h1>Room already selected</h1>
 				<p>The room you selected is: {room}</p>
+				<button
+					onClick={(): void => {
+						leave();
+						setRoomFieldValue('');
+					}}
+				>
+					Leave Room
+				</button>
 			</div>
 		);
 	}
