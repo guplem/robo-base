@@ -1,4 +1,5 @@
 import { create, StoreApi, UseBoundStore } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 type Store = {
 	room: string | null;
@@ -6,8 +7,14 @@ type Store = {
 	leave: () => void;
 };
 
-export const useRoomStore: UseBoundStore<StoreApi<Store>> = create<Store>()((set) => ({
-	room: null,
-	join: (roomName: string) => set((_state) => ({ room: roomName })),
-	leave: () => set((_state) => ({ room: null })),
-}));
+export const useRoomStore: UseBoundStore<StoreApi<Store>> = create<Store>()(
+	persist<Store>(
+		(set): Store => ({
+			room: null,
+			join: (roomName: string): void => set({ room: roomName }),
+			leave: (): void => set({ room: null }),
+		}),
+		// PERSISTANCE CONFIGURATION
+		{ name: 'roomStore' },
+	),
+);
