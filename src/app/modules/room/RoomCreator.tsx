@@ -15,6 +15,8 @@ export default function RoomCreator(): JSX.Element {
 			method: 'POST',
 			body: JSON.stringify({ name: roomFieldValue }),
 		});
+		console.log(`Response:`, await response.json());
+		console.log(`Response code:`, await response.status);
 		if (!response.ok) {
 			const data: Record<string, unknown> = await response.json();
 			console.warn(`Room creation failed: ${data.error}`);

@@ -29,8 +29,13 @@ const exists = async (request: RoboRequest, reply: RoboReply): Promise<void> => 
 	}
 };
 
-const create = async (request: RoboRequest, reply: RoboReply): Promise<void> => {
-	const providedName: string | undefined = request.query.roomName as string | undefined;
+const create = async (request: RoboRequest, reply: RoboReply): Promise<any> => {
+	logger.info('Logger Creating room...');
+	const body: Record<string, unknown> = request.body as Record<string, unknown>;
+	logger.info('Body:', body);
+	--- WTF why is there no body? ---
+	const providedName: string | undefined = body.roomName as string | undefined;
+	logger.info('providedName:', providedName);
 
 	// Check the room name validity
 	if (providedName === undefined || providedName === '') {
@@ -52,14 +57,13 @@ const create = async (request: RoboRequest, reply: RoboReply): Promise<void> => 
 
 	// Check if the room name already exists
 	const allRooms: string[] = (await Flashcore.get<string[]>(roomsDatabaseKey)) ?? [];
+	logger.info(`All rooms: ${JSON.stringify(allRooms)}`);
 	const found: boolean = allRooms.some((room) => room === request.query.roomName);
 	if (found) {
 		reply.code(409).send('Room already exists');
 		return;
 	}
-	console.log(`Creating room "${providedName}"`);
-	console.log(`All rooms: ${allRooms}`);
-	logger.info(`Creating room "${providedName}"`);
+	logger.info(`Room name "${providedName}" is valid. Ready to be created.`);
 
 	await Flashcore.set<string[]>(roomsDatabaseKey, [...allRooms, providedName]);
 	reply.code(200);

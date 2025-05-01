@@ -21,8 +21,7 @@ export default function RoomPicker(): JSX.Element {
 		const response: Response = await fetch(`/api/room?${params.toString()}`, {
 			method: 'HEAD',
 		});
-		const data: Record<string, unknown> = await response.json();
-		if (!data.found) {
+		if (!response.ok) {
 			console.warn(`Room "${roomFieldValue}" does not exist`);
 			setError(`Room "${roomFieldValue}" does not exist`);
 			return;
