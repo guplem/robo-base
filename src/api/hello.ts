@@ -8,6 +8,6 @@
  * Learn more:
  * https://robojs.dev/plugins/server
  */
-export default () => {
-	return 'Hello, world!'
-}
+export default (): string => {
+	return 'Hello, world!';
+};

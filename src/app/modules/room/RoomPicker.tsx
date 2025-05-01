@@ -17,7 +17,10 @@ export default function RoomPicker(): JSX.Element {
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
 		event.preventDefault();
 
-		const response: Response = await fetch('/api/room/exists');
+		const params: URLSearchParams = new URLSearchParams({ roomName: roomFieldValue });
+		const response: Response = await fetch(`/api/room?${params.toString()}`, {
+			method: 'HEAD',
+		});
 		const data: Record<string, unknown> = await response.json();
 		if (!data.found) {
 			console.warn(`Room "${roomFieldValue}" does not exist`);
