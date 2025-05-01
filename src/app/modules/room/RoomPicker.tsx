@@ -1,5 +1,5 @@
 import { useRoomStore } from '@/app/modules/room/store';
-import React, { ChangeEvent, FormEvent, JSX, useState } from 'react';
+import { ChangeEvent, FormEvent, JSX, useState } from 'react';
 
 export default function RoomPicker(): JSX.Element {
 	const {
@@ -9,14 +9,21 @@ export default function RoomPicker(): JSX.Element {
 	} = useRoomStore();
 
 	// state for the text field
-	const [roomFieldValue, setRoomFieldValue]: [
-		string,
-		React.Dispatch<React.SetStateAction<string>>,
-	] = useState<string>('');
+	const [roomFieldValue, setRoomFieldValue] = useState<string>('');
+
+	const [error, setError] = useState<string | null>(null);
 
 	// on submit, prevent reload, log and set the entered room name
-	const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
 		event.preventDefault();
+
+		const response: Response = await fetch('/api/room/exists');
+		const data: Record<string, unknown> = await response.json();
+		if (!data.found) {
+			console.warn(`Room "${roomFieldValue}" does not exist`);
+			setError(`Room "${roomFieldValue}" does not exist`);
+			return;
+		}
 		join(roomFieldValue);
 	};
 
@@ -37,6 +44,7 @@ export default function RoomPicker(): JSX.Element {
 			<button type='submit' disabled={roomFieldValue === ''}>
 				Join
 			</button>
+			{error && <p style={{ color: 'red' }}>{error}</p>}
 		</form>
 	);
 }
