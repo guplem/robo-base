@@ -1,10 +1,11 @@
 import { useRoomStore } from '@/app/modules/room/store';
 import React, { ChangeEvent, FormEvent, JSX, useState } from 'react';
 
-export default function RoomPicker(): JSX.Element {
+export default function RoomCreator(): JSX.Element {
 	const {
 		join,
 	}: {
+		room: string | null;
 		join: (_roomName: string) => void;
 	} = useRoomStore();
 
@@ -23,7 +24,7 @@ export default function RoomPicker(): JSX.Element {
 	return (
 		<form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
 			<div className='wrapWithStretchedChildren' style={{ gap: '5px' }}>
-				<label htmlFor='roomName'>Room Name</label>
+				<label htmlFor='roomName'>New Room Name</label>
 				<input
 					id='roomName'
 					type='text'
@@ -35,7 +36,7 @@ export default function RoomPicker(): JSX.Element {
 				/>
 			</div>
 			<button type='submit' disabled={roomFieldValue === ''}>
-				Join
+				Create
 			</button>
 		</form>
 	);

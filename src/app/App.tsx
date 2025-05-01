@@ -1,5 +1,5 @@
 import Counter from '@/app/modules/counter/Counter';
-import RoomPicker from '@/app/modules/room/RoomPicker';
+import RoomMenu from '@/app/modules/room/RoomMenu';
 import { useRoomStore } from '@/app/modules/room/store';
 import { JSX } from 'react';
 
@@ -20,7 +20,7 @@ export default function App(): JSX.Element {
 				minHeight: '100vh',
 			}}
 		>
-			{!room ? <RoomPicker /> : <Counter />}
+			{!room ? <RoomMenu /> : <Counter />}
 		</div>
 	);
 }
