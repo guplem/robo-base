@@ -1,70 +1,82 @@
-import { Flashcore, logger, RoboReply, RoboRequest } from 'robo.js';
+import { Flashcore, logger } from 'robo.js';
 
 const roomsDatabaseKey: string = 'rooms';
 
-export default async (request: RoboRequest, reply: RoboReply): Promise<void> => {
-	if (request.method == 'HEAD') {
-		await exists(request, reply);
-		return;
-	}
+export default async (request: Request): Promise<Response> => {
+	try {
+		if (request.method == 'HEAD') {
+			return await exists(request);
+		}
 
-	if (request.method == 'POST') {
-		await create(request, reply);
-		return;
-	}
+		if (request.method == 'POST') {
+			return await create(request);
+		}
 
-	reply.code(405).send(`Method ${request.method} not allowed`);
+		return new Response(`Method ${request.method} not allowed`, {
+			status: 405,
+		});
+	} catch (error) {
+		logger.error('Error in room API:', error);
+		return new Response(JSON.stringify({ message: `Internal server error: ${error}` }), {
+			status: 500,
+		});
+	}
 };
 
-const exists = async (request: RoboRequest, reply: RoboReply): Promise<void> => {
+const exists = async (request: Request): Promise<Response> => {
 	const allRooms: string[] = (await Flashcore.get<string[]>(roomsDatabaseKey)) ?? [];
-	const roomName: string | undefined = request.params.roomName as string | undefined;
-	const found: boolean = allRooms.some((room) => room === roomName);
+	const urlParams: URLSearchParams = new URLSearchParams(request.url.split('?')[1] ?? '');
+	const roomName: string | null = urlParams.get('roomName');
+	const found: boolean = roomName !== null && allRooms.some((room) => room === roomName);
 
 	// Because the HTTP method is HEAD, only status codes can be returned, no body
 	if (found) {
-		reply.code(200);
+		return new Response(JSON.stringify(null), {
+			status: 200,
+		});
 	} else {
-		reply.code(404);
+		return new Response(JSON.stringify(null), {
+			status: 404,
+		});
 	}
 };
 
-const create = async (request: RoboRequest, reply: RoboReply): Promise<any> => {
-	logger.info('Logger Creating room...');
-	const body: Record<string, unknown> = request.body as Record<string, unknown>;
-	logger.info('Body:', body);
-	--- WTF why is there no body? ---
+const create = async (request: Request): Promise<Response> => {
+	const body: Record<string, unknown> = await request.json();
 	const providedName: string | undefined = body.roomName as string | undefined;
-	logger.info('providedName:', providedName);
 
 	// Check the room name validity
 	if (providedName === undefined || providedName === '') {
-		reply.code(422).send('Room name is required');
-		return;
+		return new Response(JSON.stringify({ message: 'Room name is required' }), { status: 422 });
 	}
 	if (providedName.length < 3) {
-		reply.code(422).send('Room name must be at least 3 characters long');
-		return;
+		return new Response(
+			JSON.stringify({ message: 'Room name must be at least 3 characters long' }),
+			{ status: 422 },
+		);
 	}
 	if (providedName.length > 20) {
-		reply.code(422).send('Room name must be at most 20 characters long');
-		return;
+		return new Response(
+			JSON.stringify({ message: 'Room name must be at most 20 characters long' }),
+			{ status: 422 },
+		);
 	}
-	if (!/^[a-zA-Z0-9_ ]+$/.test(providedName as string)) {
-		reply.code(422).send('Room name can only contain letters, numbers, spaces and underscores');
-		return;
+	if (!/^[a-zA-Z0-9_ ]+$/.test(providedName)) {
+		return new Response(
+			JSON.stringify({
+				message: 'Room name can only contain letters, numbers, spaces and underscores',
+			}),
+			{ status: 422 },
+		);
 	}
 
 	// Check if the room name already exists
 	const allRooms: string[] = (await Flashcore.get<string[]>(roomsDatabaseKey)) ?? [];
-	logger.info(`All rooms: ${JSON.stringify(allRooms)}`);
-	const found: boolean = allRooms.some((room) => room === request.query.roomName);
+	const found: boolean = allRooms.some((room) => room === providedName);
 	if (found) {
-		reply.code(409).send('Room already exists');
-		return;
+		return new Response(JSON.stringify({ message: 'Room already exists' }), { status: 409 });
 	}
-	logger.info(`Room name "${providedName}" is valid. Ready to be created.`);
 
 	await Flashcore.set<string[]>(roomsDatabaseKey, [...allRooms, providedName]);
-	reply.code(200);
+	return new Response(JSON.stringify({ message: 'Room created successfully' }), { status: 200 });
 };

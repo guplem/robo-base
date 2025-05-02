@@ -1,5 +1,5 @@
-import { RoboReply } from 'robo.js';
-
-export default (reply: RoboReply): any => {
-	reply.code(400).send('Demo error message');
+export default async (): Promise<Response> => {
+	return new Response(JSON.stringify(null), {
+		status: 404,
+	});
 };

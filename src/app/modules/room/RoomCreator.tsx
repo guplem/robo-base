@@ -15,16 +15,14 @@ export default function RoomCreator(): JSX.Element {
 			method: 'POST',
 			body: JSON.stringify({ name: roomFieldValue }),
 		});
-		console.log(`Response:`, await response.json());
-		console.log(`Response code:`, await response.status);
+		const data: Record<string, unknown> = await response.json();
 		if (!response.ok) {
-			const data: Record<string, unknown> = await response.json();
-			console.warn(`Room creation failed: ${data.error}`);
-			setError(data.error as string);
+			console.warn(`Room creation failed: ${data.message}`);
+			setError(data.message as string);
 			return;
 		} else {
 			console.log(`Room "${roomFieldValue}" created successfully`);
-			setSuccess('Room created successfully!');
+			setSuccess(data.message as string);
 		}
 	};
 
