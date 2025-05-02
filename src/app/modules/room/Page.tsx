@@ -1,9 +1,9 @@
-import RoomCreator from '@/app/modules/room/RoomCreator';
-import RoomPicker from '@/app/modules/room/RoomPicker';
-import { useRoomStore } from '@/app/modules/room/store';
+import RoomCreator from '@/app/modules/room/Creator';
+import RoomPicker from '@/app/modules/room/Picker';
+import { RoomStore } from '@/app/modules/room/store';
 import { JSX, useState } from 'react';
 
-export default function RoomMenu(): JSX.Element {
+export default function RoomPage(): JSX.Element {
 	const [joiningRoom, setJoiningRoom] = useState(true);
 
 	const {
@@ -12,7 +12,7 @@ export default function RoomMenu(): JSX.Element {
 	}: {
 		room: string | null;
 		leave: () => void;
-	} = useRoomStore();
+	} = RoomStore();
 
 	// This should not be possible, but just in case
 	if (room) {

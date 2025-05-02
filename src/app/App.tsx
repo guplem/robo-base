@@ -1,6 +1,6 @@
-import Counter from '@/app/modules/counter/Counter';
-import RoomMenu from '@/app/modules/room/RoomMenu';
-import { useRoomStore } from '@/app/modules/room/store';
+import CounterPage from '@/app/modules/counter/Page';
+import RoomPage from '@/app/modules/room/Page';
+import { RoomStore } from '@/app/modules/room/store';
 import { JSX } from 'react';
 
 // The
@@ -9,7 +9,7 @@ export default function App(): JSX.Element {
 		room,
 	}: {
 		room: string | null;
-	} = useRoomStore();
+	} = RoomStore();
 
 	return (
 		<div
@@ -20,7 +20,7 @@ export default function App(): JSX.Element {
 				minHeight: '100vh',
 			}}
 		>
-			{!room ? <RoomMenu /> : <Counter />}
+			{!room ? <RoomPage /> : <CounterPage />}
 		</div>
 	);
 }
