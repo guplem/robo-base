@@ -1,8 +1,8 @@
 import { useRoomStore } from '@/app/modules/room/store';
-import { JSX, MouseEvent, useEffect, useState } from 'react';
+import { useSyncState } from '@robojs/sync';
+import { JSX, MouseEvent } from 'react';
 
 export default function Counter(): JSX.Element {
-	const { count, increment }: { count: number; increment: () => void } = useCounter();
 	const {
 		room,
 		leave,
@@ -10,6 +10,16 @@ export default function Counter(): JSX.Element {
 		room: string | null;
 		leave: () => void;
 	} = useRoomStore();
+
+	const [count, setCount] = useSyncState<number>(0, [room, 'count']);
+
+	const increment = async (): Promise<void> => {
+		setCount((prevCount: number): number => {
+			const newCount: number = prevCount + 1;
+			console.log(`Incrementing count in room "${room}" from ${prevCount} to ${newCount}`);
+			return newCount;
+		});
+	};
 
 	return (
 		<div
@@ -52,26 +62,4 @@ export default function Counter(): JSX.Element {
 			</small>
 		</div>
 	);
-}
-
-// Simple custom hook to use included APIs for demo purposes
-function useCounter(): { count: number; increment: () => void } {
-	const [count, setCount] = useState<number>(0);
-
-	useEffect(() => {
-		const run = async (): Promise<void> => {
-			const response: Response = await fetch('/api/get-count');
-			const data: { count: number } = await response.json();
-			setCount(data.count);
-		};
-		run();
-	}, []);
-
-	const increment = async (): Promise<void> => {
-		const response: Response = await fetch('/api/set-count');
-		const data: { count: number } = await response.json();
-		setCount(data.count);
-	};
-
-	return { count, increment };
 }
