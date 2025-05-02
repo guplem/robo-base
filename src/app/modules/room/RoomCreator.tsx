@@ -19,10 +19,13 @@ export default function RoomCreator(): JSX.Element {
 		if (!response.ok) {
 			console.warn(`Room creation failed: ${data.message}`);
 			setError(data.message as string);
+			setSuccess(null);
 			return;
 		} else {
 			console.log(`Room "${roomFieldValue}" created successfully`);
+			setError(null);
 			setSuccess(data.message as string);
+			return;
 		}
 	};
 

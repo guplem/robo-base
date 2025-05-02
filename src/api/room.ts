@@ -24,10 +24,15 @@ export default async (request: Request): Promise<Response> => {
 };
 
 const exists = async (request: Request): Promise<Response> => {
-	const allRooms: string[] = (await Flashcore.get<string[]>(roomsDatabaseKey)) ?? [];
 	const urlParams: URLSearchParams = new URLSearchParams(request.url.split('?')[1] ?? '');
 	const roomName: string | null = urlParams.get('roomName');
+	logger.info(`Checking if room "${roomName}" exists...`);
+
+	const allRooms: string[] = (await Flashcore.get<string[]>(roomsDatabaseKey)) ?? [];
+	logger.debug(`All rooms: ${JSON.stringify(allRooms)}`);
+
 	const found: boolean = roomName !== null && allRooms.some((room) => room === roomName);
+	logger.debug(`Room "${roomName}" exists: ${found}`);
 
 	// Because the HTTP method is HEAD, only status codes can be returned, no body
 	if (found) {
@@ -42,8 +47,10 @@ const exists = async (request: Request): Promise<Response> => {
 };
 
 const create = async (request: Request): Promise<Response> => {
+	logger.info('Creating room...');
 	const body: Record<string, unknown> = await request.json();
-	const providedName: string | undefined = body.roomName as string | undefined;
+	const providedName: string | undefined = body.name as string | undefined;
+	logger.debug(`Provided room name: ${providedName}`);
 
 	// Check the room name validity
 	if (providedName === undefined || providedName === '') {
@@ -78,5 +85,6 @@ const create = async (request: Request): Promise<Response> => {
 	}
 
 	await Flashcore.set<string[]>(roomsDatabaseKey, [...allRooms, providedName]);
+	logger.info(`Room "${providedName}" created successfully`);
 	return new Response(JSON.stringify({ message: 'Room created successfully' }), { status: 200 });
 };
