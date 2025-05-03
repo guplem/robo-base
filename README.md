@@ -27,7 +27,7 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
    - *ESLint*
    > See linting documentation [here](https://robojs.dev/robojs/linting).
 
-   > The *opinionated* configuration of *Prettier* and *ESLint* is bundled with this project. You can remove it or customize it later if needed by altering the `.prettierrc`, `.prettierignore` and `.eslintrc.js` files. 
+   > The *opinionated* configuration of *Prettier* and *ESLint* is bundled with this project. You can remove it or customize it later if needed by altering the `.prettierrc`, `.prettierignore` and `eslint.config.mjs` files.
 
 6. Enable *Sync* if your project requires state synchronization between clients.
 
@@ -85,14 +85,14 @@ Start the development server with hot reloading:
 > Make sure you have run `npm install` before starting the development server.
 
 ```bash
-npx run dev
+npm run dev
 ```
 
 After running the command:
 - The server will start at `http://localhost:3000/`.
 - An external tunnel will be created (the URL will appear in the console). This allows you to test on other devices or share the server with others.
 
-> If you want to run it using docker, you can use `docker build -t robo-app .; docker run -p 3000:3000 robo-app`.
+> If you want to run it using Docker, you can use `docker build -t robo-app .; docker run -p 3000:3000 robo-app`.
 
 ## Deployment
 
@@ -178,79 +178,148 @@ To trigger a manual deployment, run:
 gcloud builds submit --config=cloudbuild.yaml
 ```
 
-## Working with the Codebase
+## Working with RoboJS Plugins
+Use [RoboJS's plugin system](https://robojs.dev/plugins/directory) to add functionality through plugins. Here are some useful plugins:
 
-This project uses [RoboJS's plugin system](https://robojs.dev/plugins/directory), where many features are implemented as plugins. Recommended plugins include:
+### Synchronization of State between Clients
+Use [@robojs/sync](https://robojs.dev/plugins/sync) to share state in real time between clients.
 
-### State Management
-Use [Robo's state management](https://robojs.dev/robojs/state) to temporarily store data in memory. This is useful for storing data that doesn't need to persist across server restarts or for data only needed during the application's lifetime but persist across page reloads.
-
-```typescript
-import { setState, getState } from 'robo.js'
-import type { CommandResult } from 'robo.js'
-
-export default (): CommandResult => {
-	let currentPoints = getState('currentPoints') ?? 0
-	setState('currentPoints', currentPoints + 10)
-	return `You've gained 10 points! Your current total is ${currentPoints + 10} points.`
-}
-```
-
-#### Synchronization of State between Clients
-Use [@robojs/sync](https://robojs.dev/plugins/sync) for state synchronization. This is ideal for shared experiences like games or collaborative applications.
-
-The `useSyncState` hook creates a state synchronized between clients. The state can be shared across all clients or within a specific room (group of clients):
+The `useSyncState` hook creates a state synchronized between clients. The state can be shared across all clients or within a specific subset of clients:
 ```typescript
 import { useSyncState } from '@robojs/sync';
 
 // For state shared across all clients
 const [sharedState, setSharedState] = useSyncState<boolean>(false, ['uniqueId']);
 
-// For state shared only within a room (group of clients)
-const [channelState, setChannelState] = useSyncState<string>("", ['uniqueId', roomId]);
+// For state scoped to a room (group of clients)
+const [roomState, setRoomState] = useSyncState<string>('', ['uniqueId', roomId]);
 ```
 
-### Shared Data
-Robo comes bundled with [Flashcore Database](https://robojs.dev/robojs/flashcore), a key-value pair database. It is a simple and fast database for storing data accessible from all clients. While not a full-fledged database, it is useful for small amounts of data.
+Do not forget to wrap your app with the `SyncContextProvider` as shown [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/index.tsx).
+
+> An example implementation of this feature can be found [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/modules/counter/Page.tsx).
+
+#### Providing synchronized state to the component tree
+You can provide the synchronized state to the component tree using the [React Context API](https://react.dev/reference/react/createContext). This enables access to the synchronized state from any component within the tree.
+
+> You can see an example of how to define the context [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/modules/counter/Context.ts), how to provide it [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/modules/counter/Page.tsx) and how to consume it [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/modules/counter/Controls.tsx)
+
+### Scheduling Tasks
+Use [@robojs/cron](https://robojs.dev/plugins/cron) to schedule jobs at specific intervals or times.
+
+> Install the plugin with `npx robo add @robojs/cron`.
+
+You can schedule a job to run when your Robo starts by creating `src/events/_start.ts`:
+```typescript
+import { Cron } from '@robojs/cron';
+
+export default (): void => {
+    Cron('*/10 * * * * *', (): void => {
+        // This job runs every 10 seconds!
+    });
+};
+```
+
+> The `Cron` constructor returns a job object that can be used to pause, resume, stop, or get the next run time.
+
+See also how to [use a separate file for your job logic](https://robojs.dev/plugins/cron#job-file) and how to [persist jobs across server restarts](https://robojs.dev/plugins/cron#job-file).
+
+> An example implementation of this feature can be found [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/events/_start.ts).
+
+## Working with RoboJS's core features
+RoboJS provides a powerful set of features to enhance your application. Note that most core features are only available on the backend (server-side), not in the browser (client-side, e.g., `src/app`).
+
+> Avoid importing from `robo.js` in the frontend. Instead, expose backend functionality via API endpoints.
+
+Some utilities, like the [Logger](https://robojs.dev/robojs/logger), can be used in the browser by importing the subpath:
 
 ```typescript
-import { Flashcore } from 'robo.js'
-import type { CommandInteraction } from 'discord.js'
+import { logger } from 'robo.js/logger.js';
 
-export default async (interaction: CommandInteraction) => {
-	const userId = interaction.user.id
-
-	const score = await Flashcore.get(userId)
-	return score ? `High score alert: ${score}! 🏆` : 'No high score found. Game time! 🎮'
-}
+logger.info('This message is logged from the browser (client)!');
 ```
 
-> **Note:** Flashcore does not persist data outside the container. If the container is restarted or killed (for example, due to cold-boot being enabled), all data will be lost.
+For other backend state or features, create API endpoints in `src/api` and fetch them from your frontend. See the [Playground Demo](https://robojs.dev/playground) for examples.
 
-Flashcore also allows [watching for changes](https://robojs.dev/robojs/flashcore#watching-for-changes) in the database with the `Flashcore.on(...)` method, and you can stop watching with `Flashcore.off(...)`.
+> As discussed [here](https://discord.com/channels/1087134933908193330/1365947805180629022/1366169583198670951), this avoids bundling Node‑specific code into the browser build.
 
 ### API
 Robo comes bundled with [@robojs/server](https://robojs.dev/plugins/server), a simple server for creating and managing API endpoints.
 
+Creating a new endpoint is as simple as creating a new file in the `src/api` directory. The file name will be used as the endpoint path, and the exported function will handle incoming requests:
 ```typescript
-export default (request, reply) => {
-	if (request.method !== 'GET') {
-		throw new Error('Method not allowed')
-	}
+export default async (request: Request): Promise<Response> => {
+	const urlParams: URLSearchParams = new URLSearchParams(request.url.split('?')[1] ?? '');
+	const userId: string | null = urlParams.get('userId');
 
-	const userId = request.params.id
-
-	// ... perform some action with userId
-
-	return { message: `User ID is ${userId}` }
+	return new Response(
+		JSON.stringify({
+			message: 'This is a JSON response',
+			userId: userId,
+		}),
+		{
+			status: 200,
+		},
+	);
+};
 ```
 
-### Other Features
-Check out the [RoboJS documentation](https://robojs.dev/) for more information on available [plugins](https://robojs.dev/plugins) and [features](https://robojs.dev/robojs/overview).
+> Multiple example implementations of this feature can be found [here](https://github.com/guplem/robo-base/tree/sync-web-app/src/api).
 
-Some interesting features include:
-- [Logger](https://robojs.dev/robojs/logger): A simple yet powerful logger for your application.
-- [Running Mode](https://robojs.dev/robojs/mode): Select which `.env` file to use based on your application's running mode. This is useful for separating development and production environments, testing game balance, or any scenario where you need different configurations.
-- [Scheduled Tasks](https://robojs.dev/plugins/cron): Schedule tasks to run at specific intervals or times.
+### Database
+Robo comes bundled with [Flashcore Database](https://robojs.dev/robojs/flashcore), a key-value pair database. It is a simple and fast database for storing data accessible from all clients. While not a full-fledged database, it is useful for small amounts of data.
+
+```typescript
+import { Flashcore } from 'robo.js';
+import type { CommandInteraction } from 'discord.js';
+
+export default async (interaction: CommandInteraction): Promise<string> => {
+    const userId: string = interaction.user.id;
+
+    const score: number | undefined = await Flashcore.get<number>(userId);
+    return score
+        ? `High score is: ${score}!`
+        : 'No high score yet! 🎮';
+};
+```
+> An example implementation of this feature can be found [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/api/room.ts).
+
+> **Note:** Flashcore does not persist data outside the container. If the container restarts (e.g., due to cold‑boot), all data is lost. To persist, use a Keyv adapter (MySQL, MongoDB, etc.).
+
+Flashcore also allows [watching for changes](https://robojs.dev/robojs/flashcore#watching-for-changes) in the database with the `Flashcore.on(...)` method, and you can stop watching with `Flashcore.off(...)`.
+
+If it is desired to persist data, Flashcore accepts [Keyv Adapters](https://robojs.dev/robojs/flashcore#using-keyv-adapters), allowing you to use, for instance [MySQL](https://github.com/jaredwray/keyv/tree/main/packages/mysql) or [MongoDB](https://github.com/jaredwray/keyv/tree/main/packages/mongo).
+
+### State Management
+Use [Robo's state management](https://robojs.dev/robojs/state) to temporarily store data in server (backend) memory. This is useful for storing data that doesn't need to persist across server restarts.
+
+> Alternatively, you can use Flashcore without a Keyv adapter to store data in memory.
+
+#### Client-side State Management
+If you need client-side state management you can also use [Zustand](https://github.com/pmndrs/zustand) (or any other state management library like Redux, MobX, etc. or simply React's built-in state management: `useState` and `useReducer`).
+
+This is an example of a simple Zustand *store* that manages a counter:
+```typescript
+import { create } from 'zustand';
+
+type CounterStore = {
+  count: number;
+  increment: () => void;
+};
+
+export const useCounterStore = create<CounterStore>((set): CounterStore => ({
+  count: 0,
+  increment: (): void => set((state) => ({ count: state.count + 1 })),
+}));
+```
+
+> Tip: To persist your store across page reloads, use Zustand’s `persist` middleware:
+
+> An example implementation of the store can be found [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/modules/room/store.ts) and its usage can be found in many places such as [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/modules/room/Page.tsx).
+
+## Other Features
+Check out the [RoboJS documentation](https://robojs.dev/) for more information on available [plugins](https://robojs.dev/plugins) and [core features](https://robojs.dev/robojs/overview).
+
+Another useful feature is [Running Mode](https://robojs.dev/robojs/mode), which lets you select the `.env` file to use. This helps separate development, testing, and production configurations.
 
 And many more! **Be sure to explore the available [plugins](https://robojs.dev/plugins) and [features](https://robojs.dev/robojs/overview) in RoboJS.**
