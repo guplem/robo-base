@@ -249,18 +249,18 @@ Robo comes bundled with [@robojs/server](https://robojs.dev/plugins/server), a s
 Creating a new endpoint is as simple as creating a new file in the `src/api` directory. The file name will be used as the endpoint path, and the exported function will handle incoming requests:
 ```typescript
 export default async (request: Request): Promise<Response> => {
-	const urlParams: URLSearchParams = new URLSearchParams(request.url.split('?')[1] ?? '');
-	const userId: string | null = urlParams.get('userId');
+    const urlParams: URLSearchParams = new URLSearchParams(request.url.split('?')[1] ?? '');
+    const userId: string | null = urlParams.get('userId');
 
-	return new Response(
-		JSON.stringify({
-			message: 'This is a JSON response',
-			userId: userId,
-		}),
-		{
-			status: 200,
-		},
-	);
+    return new Response(
+        JSON.stringify({
+            message: 'This is a JSON response',
+            userId: userId,
+        }),
+        {
+            status: 200,
+        },
+    );
 };
 ```
 
