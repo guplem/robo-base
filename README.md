@@ -1,6 +1,10 @@
 # robo-base
 A base project for creating an easily-deployable WebApp using [RoboJS](https://robojs.dev/).
 
+> Note: This README provides step-by-step instructions for setting up and deploying a RoboJS WebApp using the `main` branch.  
+
+> For a fully implemented example showcasing additional RoboJS features, see the `sync-web-app` branch. That branch is referenced multiple times in this README as it contains simple bug functional examples of the features discussed here. It can also be used as a starting point for your own project.
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) v22 or newer
@@ -8,6 +12,8 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 - A [Google Cloud Platform (GCP)](https://console.cloud.google.com/) account and [GCP CLI](https://cloud.google.com/sdk/docs/install) (for deployment)
 
 ## Setup
+
+> Only reqiored if you are starting a new project using the `main` branch.
 
 1. Fork this repository or use it as a template for your own project.
 
@@ -36,6 +42,8 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 > At the end, you may see a few warnings about moving files after running the command. These can be safely ignored.
 
 ### Configuring Path Aliases
+
+> Only reqiored if you are starting a new project using the `main` branch.
 
 To avoid having to use relative paths in your imports, you can set up path aliases for your project. This allows you to use non-relative imports like `import { MyComponent } from '@/components/MyComponent'` instead of `import { MyComponent } from '../../components/MyComponent'`.
 
