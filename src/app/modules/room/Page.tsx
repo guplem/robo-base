@@ -1,18 +1,12 @@
 import RoomCreator from '@/app/modules/room/Creator';
 import RoomPicker from '@/app/modules/room/Picker';
-import { RoomStore } from '@/app/modules/room/store';
+import { RoomStore, RoomStoreType } from '@/app/modules/room/Store';
 import { JSX, useState } from 'react';
 
 export default function RoomPage(): JSX.Element {
 	const [joiningRoom, setJoiningRoom] = useState(true);
 
-	const {
-		room,
-		leave,
-	}: {
-		room: string | null;
-		leave: () => void;
-	} = RoomStore();
+	const { room, leave }: RoomStoreType = RoomStore();
 
 	// This should not be possible, but just in case
 	if (room) {

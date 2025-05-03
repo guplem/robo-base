@@ -1,15 +1,11 @@
 import CounterPage from '@/app/modules/counter/Page';
 import RoomPage from '@/app/modules/room/Page';
-import { RoomStore } from '@/app/modules/room/store';
+import { RoomStore, RoomStoreType } from '@/app/modules/room/Store';
 import { JSX } from 'react';
 
 // The
 export default function App(): JSX.Element {
-	const {
-		room,
-	}: {
-		room: string | null;
-	} = RoomStore();
+	const { room }: RoomStoreType = RoomStore();
 
 	return (
 		<div

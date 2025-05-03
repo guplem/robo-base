@@ -1,17 +1,11 @@
 import { CounterContext } from '@/app/modules/counter/Context';
 import CounterControls from '@/app/modules/counter/Controls';
-import { RoomStore } from '@/app/modules/room/store';
+import { RoomStore, RoomStoreType } from '@/app/modules/room/Store';
 import { useSyncState } from '@robojs/sync';
 import { JSX, MouseEvent } from 'react';
 
 export default function CounterPage(): JSX.Element {
-	const {
-		room,
-		leave,
-	}: {
-		room: string | null;
-		leave: () => void;
-	} = RoomStore();
+	const { room, leave }: RoomStoreType = RoomStore();
 
 	const [count, setCount] = useSyncState<number>(0, [room, 'count']);
 

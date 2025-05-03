@@ -1,7 +1,7 @@
 import { create, StoreApi, UseBoundStore } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-type RoomStoreType = {
+export type RoomStoreType = {
 	room: string | null;
 	join: (_roomName: string) => void;
 	leave: () => void;

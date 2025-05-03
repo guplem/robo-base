@@ -1,12 +1,8 @@
-import { RoomStore } from '@/app/modules/room/store';
+import { RoomStore, RoomStoreType } from '@/app/modules/room/Store';
 import { ChangeEvent, FormEvent, JSX, useState } from 'react';
 
 export default function RoomPicker(): JSX.Element {
-	const {
-		join,
-	}: {
-		join: (_roomName: string) => void;
-	} = RoomStore();
+	const { join }: RoomStoreType = RoomStore();
 
 	// state for the text field
 	const [roomFieldValue, setRoomFieldValue] = useState<string>('');
