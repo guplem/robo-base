@@ -1,5 +1,5 @@
 export default async (): Promise<Response> => {
-	return new Response(JSON.stringify(null), {
+	return new Response(null, {
 		status: 404,
 	});
 };
