@@ -1,6 +1,6 @@
 import RoomCreator from '@/app/modules/room/Creator';
 import RoomPicker from '@/app/modules/room/Picker';
-import { RoomStore, RoomStoreType } from '@/app/modules/room/Store';
+import { RoomStore, RoomStoreType } from '@/app/modules/room/store';
 import { JSX, useState } from 'react';
 
 export default function RoomPage(): JSX.Element {

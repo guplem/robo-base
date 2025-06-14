@@ -1,6 +1,6 @@
 import CounterPage from '@/app/modules/counter/Page';
 import RoomPage from '@/app/modules/room/Page';
-import { RoomStore, RoomStoreType } from '@/app/modules/room/Store';
+import { RoomStore, RoomStoreType } from '@/app/modules/room/store';
 import { JSX } from 'react';
 
 // The

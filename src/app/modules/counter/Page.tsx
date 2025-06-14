@@ -1,6 +1,6 @@
 import { CounterContext } from '@/app/modules/counter/Context';
 import CounterControls from '@/app/modules/counter/Controls';
-import { RoomStore, RoomStoreType } from '@/app/modules/room/Store';
+import { RoomStore, RoomStoreType } from '@/app/modules/room/store';
 import { useSyncState } from '@robojs/sync';
 import { JSX, MouseEvent } from 'react';
 

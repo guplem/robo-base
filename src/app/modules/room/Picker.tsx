@@ -1,4 +1,4 @@
-import { RoomStore, RoomStoreType } from '@/app/modules/room/Store';
+import { RoomStore, RoomStoreType } from '@/app/modules/room/store';
 import { ChangeEvent, FormEvent, JSX, useState } from 'react';
 
 export default function RoomPicker(): JSX.Element {
