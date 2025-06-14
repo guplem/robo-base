@@ -13,7 +13,7 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
 ## Setup
 
-> Only reqiored if you are starting a new project using the `main` branch.
+> Only required if you are starting a new project using the `main` branch.
 
 1. Fork this repository or use it as a template for your own project.
 
