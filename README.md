@@ -3,7 +3,7 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
 > Note: This README provides step-by-step instructions for setting up and deploying a RoboJS WebApp using the `main` branch.  
 
-> For a fully implemented example showcasing additional RoboJS features, see the `sync-web-app` branch. That branch is referenced multiple times in this README as it contains simple bug functional examples of the features discussed here. It can also be used as a starting point for your own project.
+> For a fully implemented example showcasing additional RoboJS features, see the `sync-web-app` branch. That branch is referenced multiple times in this README as it contains simple but functional examples of the features discussed here. It can also be used as a starting point for your own project.
 
 ## Prerequisites
 
