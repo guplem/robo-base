@@ -3,7 +3,7 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
 > Note: This README provides step-by-step instructions for setting up and deploying a RoboJS WebApp using the `main` branch.  
 
-> For a fully implemented example showcasing additional RoboJS features, see the `sync-web-app` branch. That branch is referenced multiple times in this README as it contains simple bug functional examples of the features discussed here. It can also be used as a starting point for your own project.
+> For a fully implemented example showcasing additional RoboJS features, see the `sync-web-app` branch. That branch is referenced multiple times in this README as it contains simple but functional examples of the features discussed here. It can also be used as a starting point for your own project.
 
 ## Prerequisites
 
@@ -13,7 +13,7 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
 ## Setup
 
-> Only reqiored if you are starting a new project using the `main` branch.
+> Only required if you are starting a new project using the `main` branch.
 
 1. Fork this repository or use it as a template for your own project.
 
@@ -43,7 +43,7 @@ A base project for creating an easily-deployable WebApp using [RoboJS](https://r
 
 ### Configuring Path Aliases
 
-> Only reqiored if you are starting a new project using the `main` branch.
+> Only required if you are starting a new project using the `main` branch.
 
 To avoid having to use relative paths in your imports, you can set up path aliases for your project. This allows you to use non-relative imports like `import { MyComponent } from '@/components/MyComponent'` instead of `import { MyComponent } from '../../components/MyComponent'`.
 
@@ -203,7 +203,7 @@ const [sharedState, setSharedState] = useSyncState<boolean>(false, ['uniqueId'])
 const [roomState, setRoomState] = useSyncState<string>('', ['uniqueId', roomId]);
 ```
 
-Do not forget to wrap your app with the `SyncContextProvider` as shown [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/index.tsx).
+Don't forget to wrap your app with the `SyncContextProvider` as shown [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/index.tsx).
 
 > An example implementation of this feature can be found [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/modules/counter/Page.tsx).
 
@@ -249,7 +249,7 @@ logger.info('This message is logged from the browser (client)!');
 
 For other backend state or features, create API endpoints in `src/api` and fetch them from your frontend. See the [Playground Demo](https://robojs.dev/playground) for examples.
 
-> As discussed [here](https://discord.com/channels/1087134933908193330/1365947805180629022/1366169583198670951), this avoids bundling Node‑specific code into the browser build.
+> As discussed [here](https://discord.com/channels/1087134933908193330/1365947805180629022/1366169583198670951), this avoids bundling Node-specific code into the browser build.
 
 ### API
 Robo comes bundled with [@robojs/server](https://robojs.dev/plugins/server), a simple server for creating and managing API endpoints.
@@ -292,7 +292,7 @@ export default async (interaction: CommandInteraction): Promise<string> => {
 ```
 > An example implementation of this feature can be found [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/api/room.ts).
 
-> **Note:** Flashcore does not persist data outside the container. If the container restarts (e.g., due to cold‑boot), all data is lost. To persist, use a Keyv adapter (MySQL, MongoDB, etc.).
+> **Note:** Flashcore does not persist data outside the container. If the container restarts (e.g., due to cold-boot), all data is lost. To persist, use a Keyv adapter (MySQL, MongoDB, etc.).
 
 Flashcore also allows [watching for changes](https://robojs.dev/robojs/flashcore#watching-for-changes) in the database with the `Flashcore.on(...)` method, and you can stop watching with `Flashcore.off(...)`.
 
@@ -321,7 +321,7 @@ export const useCounterStore = create<CounterStore>((set): CounterStore => ({
 }));
 ```
 
-> Tip: To persist your store across page reloads, use Zustand’s `persist` middleware:
+> Tip: To persist your store across page reloads, use Zustand's `persist` middleware:
 
 > An example implementation of the store can be found [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/modules/room/store.ts) and its usage can be found in many places such as [here](https://github.com/guplem/robo-base/blob/sync-web-app/src/app/modules/room/Page.tsx).
 
