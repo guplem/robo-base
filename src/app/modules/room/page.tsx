@@ -2,13 +2,15 @@ import RoomCreator from '@/app/modules/room/creator';
 import RoomPicker from '@/app/modules/room/picker';
 import { RoomStore, RoomStoreType } from '@/app/modules/room/store';
 import { UserStore } from '@/app/modules/user/store';
-import { JSX, useState } from 'react';
+import React, { JSX, useState } from 'react';
 
-export default function RoomPage(): JSX.Element {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface RoomPageProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export default function RoomPage({ style, ...props }: RoomPageProps): JSX.Element {
 	const [joiningRoom, setJoiningRoom] = useState(true);
 
 	const { room, leave }: RoomStoreType = RoomStore();
-
 	// This should not be possible, but just in case
 	if (room) {
 		return (
@@ -19,7 +21,9 @@ export default function RoomPage(): JSX.Element {
 					minHeight: '100vh',
 					minWidth: '100vw',
 					flexDirection: 'column',
+					...style,
 				}}
+				{...props}
 			>
 				<div
 					// The centered div (element)
@@ -45,7 +49,6 @@ export default function RoomPage(): JSX.Element {
 			</div>
 		);
 	}
-
 	// Show the room picker form
 	return (
 		<div
@@ -55,7 +58,9 @@ export default function RoomPage(): JSX.Element {
 				minHeight: '100vh',
 				minWidth: '100vw',
 				flexDirection: 'column',
+				...style,
 			}}
+			{...props}
 		>
 			<div
 				// The centered div (element)

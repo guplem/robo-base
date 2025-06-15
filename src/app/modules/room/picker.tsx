@@ -1,7 +1,10 @@
 import { RoomStore, RoomStoreType } from '@/app/modules/room/store';
-import { ChangeEvent, FormEvent, JSX, useState } from 'react';
+import React, { ChangeEvent, FormEvent, JSX, useState } from 'react';
 
-export default function RoomPicker(): JSX.Element {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface RoomPickerProps extends React.HTMLAttributes<HTMLFormElement> {}
+
+export default function RoomPicker({ style, ...props }: RoomPickerProps): JSX.Element {
 	const { join }: RoomStoreType = RoomStore();
 
 	// state for the text field
@@ -26,9 +29,17 @@ export default function RoomPicker(): JSX.Element {
 		setError(null);
 		join(roomFieldValue);
 	};
-
 	return (
-		<form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+		<form
+			onSubmit={handleSubmit}
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				gap: '10px',
+				...style,
+			}}
+			{...props}
+		>
 			<div className='wrapWithStretchedChildren' style={{ gap: '5px' }}>
 				<label htmlFor='roomName'>Room Name</label>
 				<input

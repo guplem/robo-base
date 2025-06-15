@@ -1,6 +1,9 @@
-import { ChangeEvent, FormEvent, JSX, useState } from 'react';
+import React, { ChangeEvent, FormEvent, JSX, useState } from 'react';
 
-export default function RoomCreator(): JSX.Element {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface RoomCreatorProps extends React.HTMLAttributes<HTMLFormElement> {}
+
+export default function RoomCreator({ style, ...props }: RoomCreatorProps): JSX.Element {
 	// state for the text field
 	const [roomFieldValue, setRoomFieldValue] = useState<string>('');
 
@@ -28,9 +31,17 @@ export default function RoomCreator(): JSX.Element {
 			return;
 		}
 	};
-
 	return (
-		<form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+		<form
+			onSubmit={handleSubmit}
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				gap: '10px',
+				...style,
+			}}
+			{...props}
+		>
 			<div className='wrapWithStretchedChildren' style={{ gap: '5px' }}>
 				<label htmlFor='roomName'>New Room Name</label>
 				<input

@@ -2,9 +2,12 @@ import CounterPage from '@/app/modules/counter/page';
 import RoomPage from '@/app/modules/room/page';
 import { RoomStore, RoomStoreType } from '@/app/modules/room/store';
 import { UserStore, UserStoreType } from '@/app/modules/user/store';
-import { JSX, useEffect } from 'react';
+import React, { JSX, useEffect } from 'react';
 
-export default function App(): JSX.Element {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface AppProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export default function App({ style, ...props }: AppProps): JSX.Element {
 	const { room, join }: RoomStoreType = RoomStore();
 	const { id, setId }: UserStoreType = UserStore();
 
@@ -67,7 +70,6 @@ export default function App(): JSX.Element {
 
 		window.history.replaceState({}, '', newUrl.toString());
 	}, [room]);
-
 	return (
 		<div
 			className='noisyBackground'
@@ -75,7 +77,9 @@ export default function App(): JSX.Element {
 				backgroundColor: 'var(--background-for-noise)',
 				overflow: 'auto',
 				minHeight: '100vh',
+				...style,
 			}}
+			{...props}
 		>
 			{!room ? <RoomPage /> : <CounterPage />}
 		</div>

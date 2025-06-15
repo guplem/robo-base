@@ -2,13 +2,15 @@ import CounterControls from '@/app/modules/counter/controls';
 import { CounterContext, decrement, increment, setTo } from '@/app/modules/counter/manager';
 import { RoomStore, RoomStoreType } from '@/app/modules/room/store';
 import { useSyncState } from '@robojs/sync';
-import { JSX, MouseEvent } from 'react';
+import React, { JSX, MouseEvent } from 'react';
 
-export default function CounterPage(): JSX.Element {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface CounterPageProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export default function CounterPage({ style, ...props }: CounterPageProps): JSX.Element {
 	const { room, leave }: RoomStoreType = RoomStore();
 
 	const [count, setCount] = useSyncState<number>(0, [room, 'count']);
-
 	return (
 		<div
 			// Div (container) that centers its child at its center
@@ -17,7 +19,9 @@ export default function CounterPage(): JSX.Element {
 				minHeight: '100vh',
 				minWidth: '100vw',
 				flexDirection: 'column',
+				...style,
 			}}
+			{...props}
 		>
 			<div
 				// The centered div (element)
