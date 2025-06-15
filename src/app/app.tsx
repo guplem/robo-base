@@ -1,4 +1,4 @@
-import GamePage from '@/app/modules/game/page';
+import CounterPage from '@/app/modules/counter/page';
 import RoomPage from '@/app/modules/room/page';
 import { RoomStore, RoomStoreType } from '@/app/modules/room/store';
 import { UserStore, UserStoreType } from '@/app/modules/user/store';
@@ -77,7 +77,7 @@ export default function App(): JSX.Element {
 				minHeight: '100vh',
 			}}
 		>
-			{!room ? <RoomPage /> : <GamePage />}
+			{!room ? <RoomPage /> : <CounterPage />}
 		</div>
 	);
 }
